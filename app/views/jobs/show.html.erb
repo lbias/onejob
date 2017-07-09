@@ -1,0 +1,85 @@
+<div class="job-content">
+  <!--======== Start - Jobs上方区块 =========-->
+  <div class="row">
+    <!--======== Start - 左侧区块 =========-->
+    <div class="col-md-7 col-md-offset-1 job-info-box">
+      <h1><%= @job.name %><span class="company">  / <%= @job.company %></span></h1>
+      <p>
+        <span class="wage"><%= @job.wage_lower_bound %> k ~ <%= @job.wage_upper_bound %> k </span> /
+        <span><span class="fa fa-map-marker"></span> <%= @job.location.name %></span> /
+        <span><span class="<%= @job.category.icon %>"> <%= @job.category.name %></span>
+       </p>
+      <p class="created"><%= @job.created_at.strftime("%Y-%m-%d") %> <span class="website">发布于职赢网</span></p>
+    </div>
+    <!--======== End - 左侧区块 =========-->
+
+    <!--======== Start - 右侧区块 =========-->
+    <div class="col-md-3 job-action-box">
+      <div>
+        <!--==== 判断是否已收藏 ====-->
+        <% if current_user && current_user.is_member_of?(@job) %>
+          <%= link_to remove_job_path(@job), method: :post, class: "btn btn-lg btn-primary" do %>
+            <span class="fa fa-star"></span> 已收藏
+          <% end %>
+        <% else %>
+          <%= link_to add_job_path(@job), method: :post, class: "btn btn-lg btn-default" do %>
+            <span class="fa fa-star-o"></span> 收藏
+          <% end %>
+        <% end %>
+      </div>
+      <div>
+        <!--==== 判断是否已投过简历 ====-->
+        <% if @resumes.length > 0 %>
+          <%= link_to("已投过简历", '#', class: "btn btn-lg btn-danger") %>
+        <% else %>
+          <%= link_to("投递简历", new_job_resume_path(@job), class: "btn btn-lg btn-success") %>
+        <% end %>
+      </div>
+    </div>
+    <!--======== End - 右侧区块 =========-->
+  </div>
+  <!--======== End - Jobs上方区块 =========-->
+<hr style="width:85%" />
+  <!--======== Start - Jobs下方区块 =========-->
+  <div class="row">
+    <!--======== Start - 左侧区块 =========-->
+    <div class="col-md-7 col-md-offset-1 job-content-box">
+      <div class="content-info">
+        <h4>职位描述：</h4>
+        <p><%= simple_format(@job.content) %></p>
+      </div>
+      <hr />
+      <div class="mail-info">
+        <h4>联络信息：</h4>
+        <p class="email"><span class="fa fa-envelope"></span> <%= @job.contact_mail %></p>
+      </div>
+    </div>
+    <!--======== End - 左侧区块 =========-->
+
+    <!--======== Start - 右侧区块 =========-->
+    <% if @sames.length > 0 %>
+    <div class="col-md-3">
+      <div class="same-box">
+        <div class="title">
+          <span>相似职位</span>
+        </div>
+        <% @sames.each do |job| %>
+          <div class="same-content">
+            <div>
+              <h3>
+                <%= link_to job_path(job), target: "_blank" do %>
+                  <%= job.name %> [<%= job.location %>]
+                <% end %>
+              </h3>
+            </div>
+            <div><p><%= job.wage_lower_bound %> k ~ <%= job.wage_upper_bound %> k</p></div>
+            <div><span><%= job.company %></span></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <% end %>
+    <!--======== End - 右侧区块 =========-->
+  </div>
+  <!--======== End - Jobs下方区块 =========-->
+</div>
